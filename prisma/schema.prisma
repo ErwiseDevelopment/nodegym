@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//model = transação
+//@@map("users") nome externo, parecido com DataView
+//NÃO UTILIZAMOS INCREMENT, POIS, DEIXA AS ROTAS MAIS DIFICIL DE BURLAR O SISTEMA
+model User {
+  id            String    @id @default(uuid()) //UNIQUE UNIVERSAL ID
+  name          String
+  email         String    @unique
+  password_hash String?
+  created_at    DateTime  @default(now())
+  checkIns      CheckIn[]
+
+  enterprises   Enterprise @relation(fields: [enterprise_id], references: [id])
+  enterprise_id String
+
+  @@map("users")
+}
+
+model CheckIn {
+  id           String    @id @default(uuid())
+  created_at   DateTime  @default(now())
+  validated_at DateTime?
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  gym    Gym    @relation(fields: [gym_id], references: [id])
+  gym_id String
+
+  @@map("check_ins")
+}
+
+model Gym {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  phone       String?
+  latitude    Decimal
+  longitude   Decimal
+  checkIns    CheckIn[]
+
+  @@map("gyms")
+}
+
+model Enterprise {
+  id   String @id @default(uuid())
+  name String
+  cnpj String
+  User User[]
+
+  @@map("enterprises")
+}
