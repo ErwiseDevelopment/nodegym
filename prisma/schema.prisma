@@ -21,9 +21,6 @@ model User {
   created_at    DateTime  @default(now())
   checkIns      CheckIn[]
 
-  enterprises   Enterprise @relation(fields: [enterprise_id], references: [id])
-  enterprise_id String
-
   @@map("users")
 }
 
@@ -57,7 +54,6 @@ model Enterprise {
   id   String @id @default(uuid())
   name String
   cnpj String
-  User User[]
 
   @@map("enterprises")
 }

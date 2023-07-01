@@ -5,14 +5,12 @@ interface RegisterUseCaseRequest {
   name: string
   email: string
   password: string
-  enterprise: string
 }
 
 export async function registerUseCase({
   name,
   email,
   password,
-  enterprise,
 }: RegisterUseCaseRequest) {
   const password_hash = await hash(password, 6)
 
@@ -30,8 +28,7 @@ export async function registerUseCase({
     data: {
       name,
       email,
-      password_hash,
-      enterprise_id: enterprise,
+      password_hash
     },
   })
 }
