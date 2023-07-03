@@ -1,12 +1,15 @@
-import { PrismaUsersRepository } from '@/repository/prisma/prisma-users-repository'
 import { describe, expect, it } from 'vitest'
 import { RegisterUseCase } from './register'
 import { compare } from 'bcryptjs'
 
+
 describe('Register Use Case', () => {
-    it('isso deve dar um hast da senha ao registrar', async () => {
-        const prismaUsersRepository = new PrismaUsersRepository()
-        const registerUseCase = new RegisterUseCase(prismaUsersRepository)
+    it('isso deve dar um hash da senha ao registrar', async () => {
+        const registerUseCase = new RegisterUseCase({
+            async findByEmail(email) {
+                return null
+            }
+        })
 
         const { user } = await registerUseCase.execute({
             name: 'Raphael Moreno',
@@ -15,10 +18,10 @@ describe('Register Use Case', () => {
         })
 
         const isPasswordCorrectlyHashed = await compare(
-                                                        '123456',
-                                                        user.password_hash)
+            '123456',
+            user.password_hash,
+        )
 
         expect(isPasswordCorrectlyHashed).toBe(true)
-        
     })
 })
