@@ -1,6 +1,7 @@
 import { PrismaUsersRepository } from '@/repository/prisma/prisma-users-repository'
-import { describe, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { RegisterUseCase } from './register'
+import { compare } from 'bcryptjs'
 
 describe('Register Use Case', () => {
     it('isso deve dar um hast da senha ao registrar', async () => {
@@ -13,6 +14,11 @@ describe('Register Use Case', () => {
             password: '123456',
         })
 
-        console.log(user.password_hash)
+        const isPasswordCorrectlyHashed = await compare(
+                                                        '123456',
+                                                        user.password_hash)
+
+        expect(isPasswordCorrectlyHashed).toBe(true)
+        
     })
 })
