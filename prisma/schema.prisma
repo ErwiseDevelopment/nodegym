@@ -17,7 +17,7 @@ model User {
   id            String    @id @default(uuid()) //UNIQUE UNIVERSAL ID
   name          String
   email         String    @unique
-  password_hash String?
+  password_hash String
   created_at    DateTime  @default(now())
   checkIns      CheckIn[]
 
